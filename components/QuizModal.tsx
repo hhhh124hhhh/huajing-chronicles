@@ -101,13 +101,13 @@ export const QuizModal: React.FC<QuizModalProps> = ({
               <div className="absolute inset-0 bg-[linear-gradient(0deg,transparent_24%,rgba(var(--accent-color),.1)_25%,rgba(var(--accent-color),.1)_26%,transparent_27%,transparent_74%,rgba(var(--accent-color),.1)_75%,rgba(var(--accent-color),.1)_76%,transparent_77%,transparent),linear-gradient(90deg,transparent_24%,rgba(var(--accent-color),.1)_25%,rgba(var(--accent-color),.1)_26%,transparent_27%,transparent_74%,rgba(var(--accent-color),.1)_75%,rgba(var(--accent-color),.1)_76%,transparent_77%,transparent)] bg-[size:30px_30px] opacity-20 pointer-events-none"></div>
               
               <div className="flex justify-between items-start mb-6 border-b border-white/20 pb-2">
-                 <span className="text-xs font-mono font-bold text-[var(--accent-color)] glitch-hover tracking-widest">>> OPTION_0{index+1}</span>
+                 <span className="text-xs font-mono font-bold text-[var(--accent-color)] glitch-hover tracking-widest">{'>>'} OPTION_0{index+1}</span>
                  <Disc size={16} className={`text-slate-500 ${isSelected ? 'animate-spin text-[var(--accent-color)]' : ''}`} />
               </div>
               
               <p className={`font-mono text-sm leading-relaxed z-10 ${isSelected ? 'text-white' : 'text-slate-300'}`}>{option}</p>
               
-              {isSelected && <div className="absolute bottom-2 right-2 text-[10px] font-mono text-[var(--accent-color)] animate-pulse bg-black/50 px-2">>> EXECUTING...</div>}
+              {isSelected && <div className="absolute bottom-2 right-2 text-[10px] font-mono text-[var(--accent-color)] animate-pulse bg-black/50 px-2">{'>>'} EXECUTING...</div>}
               
               {/* Corner Accents */}
               <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[var(--accent-color)]"></div>

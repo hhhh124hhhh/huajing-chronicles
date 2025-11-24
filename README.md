@@ -69,12 +69,24 @@ cd huajing-chronicles
 # 2. 安装依赖
 npm install
 
-# 3. 设置环境变量
-# (本项目通常在构建时注入 API_KEY，或在本地开发时设置)
-export API_KEY="your_google_gemini_api_key"
+### 3. 设置环境变量
+1. 复制环境变量示例文件：
+```bash
+cp .env.example .env
+```
+
+2. 使用文本编辑器打开 `.env` 文件，替换为你的 Google Gemini API 密钥：
+```bash
+# 获取 API 密钥：https://ai.google.dev/gemini-api/keys
+GEMINI_API_KEY=your_google_gemini_api_key_here
+```
+
+3. 保存并关闭文件
+
+**注意：** `.env` 文件包含敏感信息，请确保不要将其提交到版本控制系统（项目已在 `.gitignore` 中排除了此文件）。
 
 # 4. 启动
-npm start
+npm run dev 
 ```
 
 ## ⚠️ 玩前必读
