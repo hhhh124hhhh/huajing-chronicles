@@ -63,7 +63,8 @@
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/your-username/huajing-chronicles.git
+git clone https://github.com/hhhh124hhhh/huajing-chronicles.git
+cd huajing-chronicles
 
 # 2. 安装依赖
 npm install
