@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { UserProfile, IntroData } from '../types';
-import { generateIntroStory } from '../services/geminiService';
+import { generateIntroStory } from '../services/gameService';
 import { ArrowRight, Sparkles, Loader2, Image as ImageIcon, Film } from 'lucide-react';
 import { audioService } from '../services/audioService';
 

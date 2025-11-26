@@ -4,7 +4,7 @@ import { Level, GameModule, QuizData, ModuleRecord, UserProfile } from '../types
 import { ArrowLeft, Check, ArrowRight, Image as ImageIcon, Disc, FileText, Lock, Brush, Fingerprint, Zap } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { QuizModal } from './QuizModal';
-import { generateModuleQuiz, generateLevelImage } from '../services/geminiService';
+import { generateModuleQuiz, generateLevelImage } from '../services/gameService';
 import { audioService } from '../services/audioService';
 import { AIAssistant } from './AIAssistant';
 

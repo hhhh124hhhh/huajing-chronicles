@@ -85,3 +85,8 @@ export interface ChatMessage {
   text: string;
   isStreaming?: boolean;
 }
+
+export interface Chat {
+  sendMessage(message: string): Promise<string>;
+  systemInstruction?: string;
+}

@@ -8,6 +8,35 @@ export default defineConfig(({ mode }) => {
       server: {
         port: 3000,
         host: '0.0.0.0',
+        proxy: {
+          // 豆包（火山引擎）API代理
+          '/api/ark': {
+            target: 'https://ark.cn-beijing.volces.com/api/v3',
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/api\/ark/, ''),
+            headers: {
+              'Origin': 'https://ark.cn-beijing.volces.com'
+            }
+          },
+          // 文心一言（百度）API代理
+          '/api/ernie': {
+            target: 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop',
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/api\/ernie/, ''),
+            headers: {
+              'Origin': 'https://aip.baidubce.com'
+            }
+          },
+          // 通义千问（阿里云）API代理
+          '/api/qwen': {
+            target: 'https://dashscope.aliyuncs.com/api/v1/services',
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/api\/qwen/, ''),
+            headers: {
+              'Origin': 'https://dashscope.aliyuncs.com'
+            }
+          }
+        }
       },
       plugins: [react()],
       define: {

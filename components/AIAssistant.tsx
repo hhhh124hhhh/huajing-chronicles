@@ -1,9 +1,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, X, Send, MessageSquare, Sparkles, User, Briefcase, Smile, Loader2, Terminal, ShieldAlert } from 'lucide-react';
-import { UserProfile, ChatMessage, QuizData } from '../types';
-import { createAssistantChat } from '../services/geminiService';
-import { Chat, GenerateContentResponse } from "@google/genai";
+import { UserProfile, ChatMessage, QuizData, Chat } from '../types';
+import { createAssistantChat } from '../services/gameService';
 import { audioService } from '../services/audioService';
 
 interface AIAssistantProps {
@@ -49,24 +48,14 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ userProfile, currentQu
         contextPrefix = `[情报更新：当前剧本“${currentQuiz.scenario}”。面临抉择“${currentQuiz.question}”。选项：${currentQuiz.options.join(' / ')}。] 请基于此提供战术分析。用户讯息：`;
       }
 
-      const stream = await chatRef.current.sendMessageStream({ message: contextPrefix + userText });
-      
       const botMsgId = (Date.now() + 1).toString();
       setMessages(prev => [...prev, { id: botMsgId, role: 'model', text: '', isStreaming: true }]);
 
-      let fullText = "";
-      for await (const chunk of stream) {
-        const c = chunk as GenerateContentResponse;
-        if (c.text) {
-          fullText += c.text;
-          setMessages(prev => prev.map(m => 
-            m.id === botMsgId ? { ...m, text: fullText } : m
-          ));
-        }
-      }
+      // 使用统一的sendMessage方法，不再依赖特定的streaming实现
+      const fullText = await chatRef.current.sendMessage(contextPrefix + userText);
       
       setMessages(prev => prev.map(m => 
-        m.id === botMsgId ? { ...m, isStreaming: false } : m
+        m.id === botMsgId ? { ...m, text: fullText, isStreaming: false } : m
       ));
       audioService.playSuccess();
       

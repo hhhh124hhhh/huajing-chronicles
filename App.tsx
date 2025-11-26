@@ -7,7 +7,7 @@ import { LevelCompleteModal } from './components/LevelCompleteModal';
 import { getLevels } from './constants';
 import { Level, UserProgress, QuizData, UserProfile, FinancialReport, ModuleRecord } from './types';
 import { audioService } from './services/audioService';
-import { updateNarrativeContext } from './services/geminiService';
+import { updateNarrativeContext } from './services/gameService';
 
 const App: React.FC = () => {
   // Game State

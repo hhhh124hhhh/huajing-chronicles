@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { UserProgress, Achievement, FinancialReport, ModuleRecord } from '../types';
 import { X, Award, Medal, Target, Zap, Crown, GraduationCap, BrainCircuit, Sparkles, RefreshCw, LayoutDashboard, Album, BookOpen, Calendar, CheckCircle2, AlertCircle, Fingerprint, BarChart3, ScanFace, Trash2, AlertTriangle, Save, Eye } from 'lucide-react';
-import { generateUserReport } from '../services/geminiService';
+import { generateUserReport } from '../services/gameService';
 import { audioService } from '../services/audioService';
 
 interface AchievementsModalProps {

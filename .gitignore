@@ -27,3 +27,6 @@ dist-ssr
 *.sw?
 .history/
 
+.trae/documents/解决豆包API跨域问题.md
+.trae/documents/支持国内大模型的实现计划.md
+screenshot.png
