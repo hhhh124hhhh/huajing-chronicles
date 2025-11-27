@@ -30,3 +30,11 @@ dist-ssr
 .trae/documents/解决豆包API跨域问题.md
 .trae/documents/支持国内大模型的实现计划.md
 screenshot.png
+.trae/documents/修复AI服务API密钥配置问题.md
+.trae/documents/修复样式不一致问题.md
+components/AchievementsModal.tsx
+.trae/documents/页面布局美化计划.md
+.trae/documents/修复游戏选项显示英文问题.md
+.trae/documents/设计主题相符的AI加载进度条.md
+.trae/documents/修复AI生成英文内容问题.md
+.trae/documents/修复AI输出中英文混杂和选项深度不够的问题.md

@@ -91,7 +91,7 @@ export class DoubaoService implements AIService {
 
   async generateJSON(prompt: string, schema: any): Promise<any> {
     try {
-      const jsonPrompt = `${prompt}\n\n请严格按照以下JSON schema格式输出结果：\n${JSON.stringify(schema, null, 2)}\n\n输出时只包含JSON内容，不要包含其他任何文字。`;
+      const jsonPrompt = `${prompt}\n\n请严格按照以下JSON schema格式输出结果：\n${JSON.stringify(schema, null, 2)}\n\n输出时只包含JSON内容，不要包含其他任何文字，不要添加任何解释或说明。`;
       
       const response = await fetch(`${this.baseUrl}/chat/completions`, {
         method: 'POST',
@@ -118,15 +118,42 @@ export class DoubaoService implements AIService {
       });
 
       const data = await response.json();
+      const content = data.choices[0]?.message?.content || '';
+      
       try {
-        return JSON.parse(data.choices[0]?.message?.content || '{}');
+        // 清理内容，只保留JSON部分
+        const cleanedContent = this.cleanJSONContent(content);
+        return JSON.parse(cleanedContent);
       } catch (parseError) {
         console.error('Failed to parse Doubao JSON response:', parseError);
+        console.error('Raw content:', content);
         return {};
       }
     } catch (error) {
       console.error('Doubao JSON generation error:', error);
       return {};
     }
+  }
+
+  // 清理JSON内容，处理豆包API可能返回的额外文本
+  private cleanJSONContent(content: string): string {
+    // 移除可能的前缀和后缀文本
+    let cleaned = content.trim();
+    
+    // 移除可能的Markdown代码块标记
+    cleaned = cleaned.replace(/^```json\n/, '');
+    cleaned = cleaned.replace(/\n```$/, '');
+    cleaned = cleaned.replace(/^```\n/, '');
+    cleaned = cleaned.replace(/\n```$/, '');
+    
+    // 尝试找到JSON的开始和结束位置
+    const startIndex = cleaned.indexOf('{');
+    const endIndex = cleaned.lastIndexOf('}');
+    
+    if (startIndex !== -1 && endIndex !== -1) {
+      cleaned = cleaned.substring(startIndex, endIndex + 1);
+    }
+    
+    return cleaned;
   }
 }

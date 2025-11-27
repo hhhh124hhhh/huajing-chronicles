@@ -1,4 +1,3 @@
-
 # 🏙️ 华京市风云录 (Huajing City Chronicles)
 
 > **"在这座霓虹闪烁的城市里，金钱是血液，但人性才是脊梁。"**
@@ -7,11 +6,11 @@
 
 **华京市风云录** 最初是一个由 AI 驱动的财商教育游戏，但随着开发的深入，它演变成了一个关于**人性、抉择与生存**的文字冒险模拟器（RPG）。
 
-不同于传统的“大富翁”式游戏，本项目利用 **Google Gemini API** 的强大生成能力，构建了一个动态、残酷且充满不确定性的现实世界。在这里，玩家不仅要计算投资回报率，更要在道德边缘游走，在欲望与理智之间博弈。
+不同于传统的“大富翁”式游戏，本项目利用 **Google Gemini API** 和 **国内AI API** 的强大生成能力，构建了一个动态、残酷且充满不确定性的现实世界。在这里，玩家不仅要计算投资回报率，更要在道德边缘游走，在欲望与理智之间博弈。
 
 ## 🎮 核心理念：不仅是财商，更是人性
 
-在这个游戏中，由于 Google Gemini 提供的实时剧情生成，没有两次冒险是完全相同的。
+在这个游戏中，由于 AI 提供的实时剧情生成，没有两次冒险是完全相同的。
 
 *   **童年篇 (Fantasy)：** 关于诱惑与延迟满足。是吃掉眼前的毒糖果，还是为过冬储备？
 *   **少年篇 (Social)：** 关于虚荣与自我认同。是透支未来购买限量球鞋融入圈子，还是在孤独中积累资本？
@@ -31,8 +30,8 @@
 *   **☁️ 新海诚风 (Anime):** 唯美却孤独的都市传说。
 
 ### 2. AI 驱动的无限剧本 (Infinite Narrative)
-*   **动态关卡：** 利用 `gemini-2.5-flash` 模型，根据玩家当前的职业（如金融、科技、体制内）和历史选择，实时生成剧情抉择。
-*   **环境渲染：** 利用 `gemini-2.5-flash-image` 实时生成符合当前剧情氛围的背景图。
+*   **动态关卡：** 利用 AI 模型，根据玩家当前的职业（如金融、科技、体制内）和历史选择，实时生成剧情抉择。
+*   **环境渲染：** 利用 AI 图像生成能力，实时生成符合当前剧情氛围的背景图。
 *   **容错机制：** 即使网络波动，内置的本地降级策略也能保证游戏流畅进行。
 
 ### 3. 影子顾问 (Shadow Consultant)
@@ -48,16 +47,23 @@
 
 *   **Frontend:** React 19, TypeScript
 *   **Styling:** Tailwind CSS (实现了复杂的动态主题切换)
-*   **AI Engine:** Google GenAI SDK (`@google/genai`)
-    *   Text Generation: `gemini-2.5-flash`
-    *   Image Generation: `gemini-2.5-flash-image`
+*   **AI Engine:** 
+    *   Google GenAI SDK (`@google/genai`)
+        *   Text Generation: `gemini-2.5-flash`
+        *   Image Generation: `gemini-2.5-flash-image`
+    *   国内AI API
+        *   百度文心一言 (Ernie)
+        *   阿里云通义千问 (Qwen)
+        *   字节跳动豆包 (Doubao)
 *   **Audio:** Web Audio API (无素材依赖，程序化生成音效)
 *   **State Management:** React Hooks + LocalStorage Persistence
 
 ## 🚀 快速开始
 
 ### 前置要求
-你需要一个 Google Gemini API Key。
+你需要以下任一 API Key：
+*   Google Gemini API Key
+*   国内AI平台 API Key（百度文心一言、阿里云通义千问、字节跳动豆包）
 
 ### 安装与运行
 
@@ -75,10 +81,40 @@ npm install
 cp .env.example .env
 ```
 
-2. 使用文本编辑器打开 `.env` 文件，替换为你的 Google Gemini API 密钥：
+2. 使用文本编辑器打开 `.env` 文件，根据需要配置 API 密钥：
+
+**使用 Google Gemini API（默认）：**
 ```bash
+# 指定AI提供商
+VITE_AI_PROVIDER=gemini
 # 获取 API 密钥：https://ai.google.dev/gemini-api/keys
-GEMINI_API_KEY=your_google_gemini_api_key_here
+VITE_GEMINI_API_KEY=your_google_gemini_api_key_here
+```
+
+**使用国内AI API：**
+
+**百度文心一言：**
+```bash
+# 指定AI提供商
+VITE_AI_PROVIDER=ernie
+# 获取 API 密钥：https://cloud.baidu.com/product/wenxinworkshop
+VITE_ERNIE_API_KEY=your_ernie_api_key_here
+```
+
+**阿里云通义千问：**
+```bash
+# 指定AI提供商
+VITE_AI_PROVIDER=qwen
+# 获取 API 密钥：https://dashscope.aliyun.com/
+VITE_QWEN_API_KEY=your_qwen_api_key_here
+```
+
+**字节跳动豆包：**
+```bash
+# 指定AI提供商
+VITE_AI_PROVIDER=doubao
+# 获取 API 密钥：https://ark.bytedance.com/
+VITE_DOUBAO_API_KEY=your_doubao_api_key_here
 ```
 
 3. 保存并关闭文件
@@ -95,4 +131,4 @@ npm run dev
 
 ---
 
-Made with ❤️ & 🤖 using React + Gemini
+Made with ❤️ & 🤖 using React + AI
