@@ -38,3 +38,4 @@ components/AchievementsModal.tsx
 .trae/documents/设计主题相符的AI加载进度条.md
 .trae/documents/修复AI生成英文内容问题.md
 .trae/documents/修复AI输出中英文混杂和选项深度不够的问题.md
+.trae/documents/为Gemini API添加代理转发配置.md

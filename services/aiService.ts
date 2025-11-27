@@ -15,16 +15,27 @@ export class AIServiceFactory {
   static createService(): AIService {
     const provider = import.meta.env.VITE_AI_PROVIDER || 'gemini';
     
-    switch (provider.toLowerCase()) {
-      case 'ernie':
-        return new ErnieService();
-      case 'qwen':
-        return new QwenService();
-      case 'doubao':
-        return new DoubaoService();
-      case 'gemini':
-      default:
-        return new GeminiService();
+    try {
+      switch (provider.toLowerCase()) {
+        case 'ernie':
+          return new ErnieService();
+        case 'qwen':
+          return new QwenService();
+        case 'doubao':
+          return new DoubaoService();
+        case 'gemini':
+        default:
+          // 检查Gemini API密钥格式是否正确
+          const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
+          if (!geminiApiKey.startsWith('AIza')) {
+            console.warn('Invalid Gemini API key format. Falling back to Doubao service.');
+            return new DoubaoService();
+          }
+          return new GeminiService();
+      }
+    } catch (error) {
+      console.error('Failed to create AI service. Falling back to Doubao service:', error);
+      return new DoubaoService();
     }
   }
 }

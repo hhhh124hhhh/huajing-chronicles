@@ -1,5 +1,4 @@
 
-import { GoogleGenAI, Type, Chat, GenerateContentResponse } from "@google/genai";
 import { QuizData, AgeGroup, ModuleRecord, FinancialReport, IntroData } from "../types";
 import { AIService } from "./aiService";
 
@@ -36,29 +35,68 @@ const extractImageFromResponse = (response: any): string | null => {
 };
 
 export class GeminiService implements AIService {
-  private ai: GoogleGenAI;
+  private apiKey: string;
   private modelId: string;
   private imageModelId: string;
 
   constructor() {
-    this.ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
+    this.apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
     this.modelId = 'gemini-2.5-flash';
     this.imageModelId = 'gemini-2.5-flash-image';
   }
 
+  private async sendRequest(endpoint: string, body: any): Promise<any> {
+    // 检查API密钥格式是否正确（Google Gemini API密钥通常以AIza开头）
+    if (!this.apiKey.startsWith('AIza')) {
+      throw new Error('Invalid Gemini API key format. Google Gemini API keys should start with "AIza".');
+    }
+    
+    const url = `/api/gemini${endpoint}?key=${this.apiKey}`;
+    
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        // 尝试获取错误详情
+        let errorDetails = '';
+        try {
+          const errorJson = await response.json();
+          errorDetails = JSON.stringify(errorJson, null, 2);
+        } catch (e) {
+          errorDetails = await response.text();
+        }
+        throw new Error(`API request failed: ${response.status} ${response.statusText}\nDetails: ${errorDetails}`);
+      }
+
+      return response.json();
+    } catch (e) {
+      console.error(`Request to ${url} failed:`, e);
+      throw e;
+    }
+  }
+
   async generateText(prompt: string): Promise<string> {
-    const response = await this.ai.models.generateContent({
-      model: this.modelId,
-      contents: prompt
-    });
-    return response.text || '';
+    try {
+      const response = await this.sendRequest(`/models/${this.modelId}:generateContent`, {
+        contents: [{ parts: [{ text: prompt }] }]
+      });
+      return response.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    } catch (e) {
+      console.error("Text generation error:", e);
+      return '';
+    }
   }
 
   async generateImage(prompt: string): Promise<string | null> {
     try {
-      const response = await this.ai.models.generateContent({
-        model: this.imageModelId,
-        contents: { parts: [{ text: prompt }] },
+      const response = await this.sendRequest(`/models/${this.imageModelId}:generateContent`, {
+        contents: [{ parts: [{ text: prompt }] }]
       });
       return extractImageFromResponse(response);
     } catch (e) {
@@ -67,20 +105,35 @@ export class GeminiService implements AIService {
     }
   }
 
-  createChat(systemInstruction: string): Chat {
-    return this.ai.chats.create({ model: this.modelId, config: { systemInstruction } });
+  createChat(systemInstruction: string): any {
+    const self = this;
+    return {
+      async sendMessage(message: string): Promise<string> {
+        const response = await self.sendRequest(`/models/${self.modelId}:generateContent`, {
+          contents: [
+            { parts: [{ text: systemInstruction }] },
+            { parts: [{ text: message }] }
+          ]
+        });
+        return response.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      }
+    };
   }
 
   async generateJSON(prompt: string, schema: any): Promise<any> {
-    const response = await this.ai.models.generateContent({
-      model: this.modelId,
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: schema
-      }
-    });
-    return JSON.parse(response.text || "{}");
+    try {
+      const response = await this.sendRequest(`/models/${this.modelId}:generateContent`, {
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: schema
+        }
+      });
+      return JSON.parse(response.candidates?.[0]?.content?.parts?.[0]?.text || "{}");
+    } catch (e) {
+      console.error("JSON generation error:", e);
+      return {};
+    }
   }
 }
 

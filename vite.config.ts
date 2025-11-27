@@ -35,6 +35,15 @@ export default defineConfig(({ mode }) => {
             headers: {
               'Origin': 'https://dashscope.aliyuncs.com'
             }
+          },
+          // Gemini（Google）API代理
+          '/api/gemini': {
+            target: 'https://generativelanguage.googleapis.com/v1beta',
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/api\/gemini/, ''),
+            headers: {
+              'Origin': 'https://generativelanguage.googleapis.com'
+            }
           }
         }
       },
